@@ -10,7 +10,7 @@ import (
 	"github.com/xescugc/marshaler"
 )
 
-type TestStruct struct {
+type testURL struct {
 	URL marshaler.URL `json:"url"`
 }
 
@@ -19,15 +19,15 @@ func TestNewURL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error parsing the url %s", err)
 	}
-	ts := TestStruct{URL: marshaler.URL{URL: u}}
-	te := TestStruct{URL: marshaler.NewURL(u)}
+	ts := testURL{URL: marshaler.URL{URL: u}}
+	te := testURL{URL: marshaler.NewURL(u)}
 
 	if ts != te {
 		t.Fatalf("expect %+v to be equal to %+v", ts, te)
 	}
 }
 
-func TestMarshalJSON(t *testing.T) {
+func TestURLMarshalJSON(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		u, err := url.Parse("http://example.com")
 		if err != nil {
@@ -35,7 +35,7 @@ func TestMarshalJSON(t *testing.T) {
 		}
 
 		eu := fmt.Sprintf(`{"url":"%s"}`, u)
-		ts := TestStruct{URL: marshaler.URL{URL: u}}
+		ts := testURL{URL: marshaler.URL{URL: u}}
 
 		b, err := json.Marshal(ts)
 		if err != nil {
@@ -48,7 +48,7 @@ func TestMarshalJSON(t *testing.T) {
 	})
 }
 
-func TestUnmarshalJSON(t *testing.T) {
+func TestURLUnmarshalJSON(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		u, err := url.Parse("http://example.com")
 		if err != nil {
@@ -56,8 +56,8 @@ func TestUnmarshalJSON(t *testing.T) {
 		}
 
 		eu := []byte(fmt.Sprintf(`{"url": "%s"}`, u))
-		ets := TestStruct{URL: marshaler.URL{URL: u}}
-		var ts TestStruct
+		ets := testURL{URL: marshaler.URL{URL: u}}
+		var ts testURL
 
 		err = json.Unmarshal(eu, &ts)
 		if err != nil {
